@@ -1,8 +1,8 @@
 from tqdm import tqdm
 from matplotlib import pyplot as plt
 import numpy as np
+from our_library.layers import NeuralNetwork, BCELoss
 from our_library.tools import binary_accuracy, multi_class_f1
-
 
 class Wrapper:
     def __init__(
@@ -159,7 +159,14 @@ class MNISTWrapper(Wrapper):
         self.loss
         self.learning_rate
         """
-        ...
+
+        prediction = self.model.forward(x) # forward pass, get probabilities
+        loss_batch = self.loss.forward(prediction, y) # loss forward
+        self.loss.backward(prediction, y) # loss backward
+        self.model.backward(self.loss.new_grad) # model's backward pass
+        self.model.step(self.learning_rate) # update weights and biases
+
+        return loss_batch, prediction
 
     def predict_batch(self, x):
         """
@@ -168,4 +175,6 @@ class MNISTWrapper(Wrapper):
         :param x: входные данные np.array with shape (batch_size, n_features)
         :return: prediction - матрица предсказаний вашей модели
         """
-        ...
+
+        prediction = self.model.forward(x)
+        return(prediction)
