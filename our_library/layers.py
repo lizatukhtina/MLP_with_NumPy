@@ -92,7 +92,7 @@ class NeuralNetwork:
             module.forward(input)
             input = module.output
 
-        probabilities = input # values from the lasy layer (output)
+        probabilities = input # values from the last layer (output)
         return probabilities
 
     def backward(self, grad):
